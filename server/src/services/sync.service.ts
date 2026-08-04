@@ -3,10 +3,11 @@ import { Insertable } from 'kysely';
 import { DateTime, Duration } from 'luxon';
 import { Writable } from 'node:stream';
 import { TransactionHandle } from 'src/database.js';
-import { OnJob } from 'src/decorators.js';
+import { OnEvent, OnJob } from 'src/decorators.js';
 import { AuthDto } from 'src/dtos/auth.dto.js';
 import { SyncAckDeleteDto, SyncAckSetDto, SyncAssetV2, SyncItem, SyncStreamDto } from 'src/dtos/sync.dto.js';
-import { JobName, MemoryType, QueueName, SyncEntityType, SyncRequestType } from 'src/enum.js';
+import { ImmichWorker, JobName, MemoryType, QueueName, SyncEntityType, SyncRequestType } from 'src/enum.js';
+import type { ArgOf } from 'src/repositories/event.repository.js';
 import { SyncQueryOptions } from 'src/repositories/sync.repository.js';
 import { SessionSyncCheckpointTable } from 'src/schema/tables/sync-checkpoint.table.js';
 import { BaseService } from 'src/services/base.service.js';
@@ -99,6 +100,13 @@ const sessionOrThrow = (auth: AuthDto) => {
 
 @Injectable()
 export class SyncService extends BaseService {
+  @OnEvent({ name: 'ConfigUpdate', workers: [ImmichWorker.Microservices] })
+  async onConfigUpdate({ newConfig, oldConfig }: ArgOf<'ConfigUpdate'>) {
+    if (oldConfig.server.publicUsers && !newConfig.server.publicUsers) {
+      await this.sessionRepository.requireFullSyncForNonAdmins();
+    }
+  }
+
   getAcks(auth: AuthDto) {
     return this.syncCheckpointRepository.getAll(sessionOrThrow(auth).id);
   }
