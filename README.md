@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> **This is an unofficial privacy-fix fork of [Immich](https://github.com/immich-app/immich).** It is not affiliated with the Immich project. Please report problems with this fork here, not upstream.
+> **This is an unofficial privacy-fix fork of [Immich](https://github.com/immich-app/immich).** It is not affiliated with the Immich project. Please report problems with this fork [by email](mailto:info@braydmedia.de), not to the Immich project.
 
 ## What this fork changes
 
@@ -25,6 +25,7 @@ services:
     image: ghcr.io/br4yd/immich-server:v3.3.6-privacy-fix # was ghcr.io/immich-app/immich-server:...
 ```
 
+- **Existing devices:** the re-sync only runs when the setting changes. If Public Users is already off when you switch to this image, turn it on and back off once so devices drop their cached user list.
 - **Machine learning:** keep the official `immich-machine-learning` image at the matching version. This fork does not build its own.
 - **Versions:** image tags follow `vX.Y.Z-privacy-fix`, based on upstream `vX.Y.Z`. See the [available images](https://github.com/br4yd/immich/pkgs/container/immich-server).
 - **Platform:** `linux/amd64` only.
