@@ -1,3 +1,37 @@
+> [!IMPORTANT]
+> **This is an unofficial privacy-fix fork of [Immich](https://github.com/immich-app/immich).** It is not affiliated with the Immich project. Please report problems with this fork here, not upstream.
+
+## What this fork changes
+
+Upstream's mobile sync v2 sends the full user list to every client, even when the **Public Users** server setting is disabled. This fork makes the sync respect that setting.
+
+| Situation | Upstream | This fork |
+| --- | --- | --- |
+| Non-admin syncs while Public Users is off | Receives all users | Receives only themselves, their partners and people they share an album with |
+| Admin syncs, or Public Users is on | Receives all users | Unchanged |
+| Public Users is switched on or off | Devices keep their cached user list | All non-admin sessions do a full re-sync, so the list is corrected without logging out |
+
+Related upstream issues: [#24528](https://github.com/immich-app/immich/issues/24528), [#30250](https://github.com/immich-app/immich/issues/30250).
+
+Everything else matches the upstream release. There are no database migrations and no new settings, and the web and mobile apps are unchanged. The only other addition is a CI workflow that builds the image.
+
+## Using the Docker image
+
+In your `docker-compose.yml`, replace only the server image:
+
+```yaml
+services:
+  immich-server:
+    image: ghcr.io/br4yd/immich-server:v3.3.6-privacy-fix # was ghcr.io/immich-app/immich-server:...
+```
+
+- **Machine learning:** keep the official `immich-machine-learning` image at the matching version. This fork does not build its own.
+- **Versions:** image tags follow `vX.Y.Z-privacy-fix`, based on upstream `vX.Y.Z`. See the [available images](https://github.com/br4yd/immich/pkgs/container/immich-server).
+- **Platform:** `linux/amd64` only.
+- **Source:** the changes are on the `deploy/vX.Y.Z` branches, not on `main`.
+
+---
+
 <p align="center"> 
   <br/>
   <a href="https://opensource.org/license/agpl-v3"><img src="https://img.shields.io/badge/License-AGPL_v3-blue.svg?color=3F51B5&style=for-the-badge&label=License&logoColor=000000&labelColor=ececec" alt="License: AGPLv3"></a>
