@@ -22,7 +22,7 @@ In your `docker-compose.yml`, replace only the server image:
 ```yaml
 services:
   immich-server:
-    image: ghcr.io/br4yd/immich-server:v3.3.6-privacy-fix # was ghcr.io/immich-app/immich-server:...
+    image: ghcr.io/br4yd/immich-server:v3.4.1-privacy-fix # was ghcr.io/immich-app/immich-server:...
 ```
 
 - **Existing devices:** the re-sync only runs when the setting changes. If Public Users is already off when you switch to this image, turn it on and back off once so devices drop their cached user list.
