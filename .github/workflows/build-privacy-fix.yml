@@ -2,12 +2,17 @@ name: Build privacy-fix server image
 
 on:
   push:
-    tags:
-      - 'v*-privacy-fix'
+    branches:
+      - main
   workflow_dispatch:
+
+concurrency:
+  group: build-privacy-fix
+  cancel-in-progress: false
 
 jobs:
   build-server:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     permissions:
       contents: read
@@ -28,7 +33,8 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository_owner }}/immich-server
           tags: |
-            type=ref,event=tag
+            type=raw,value={{date 'YYYY-MM-DD' tz='Europe/Berlin'}}
+            type=raw,value=latest
 
       - uses: docker/build-push-action@v7
         with:
