@@ -11,8 +11,6 @@ Upstream's mobile sync v2 sends the full user list to every client, even when th
 | Admin syncs, or Public Users is on | Receives all users | Unchanged |
 | Public Users is switched on or off | Devices keep their cached user list | All non-admin sessions do a full re-sync, so the list is corrected without logging out |
 
-Related upstream issues: [#24528](https://github.com/immich-app/immich/issues/24528), [#30250](https://github.com/immich-app/immich/issues/30250).
-
 Everything else matches upstream `main`. The fork adds no database migrations and no new settings, and the web and mobile apps are unchanged. The only other addition is a CI workflow that builds the image.
 
 ## Using the Docker image
