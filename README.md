@@ -13,7 +13,7 @@ Upstream's mobile sync v2 sends the full user list to every client, even when th
 
 Related upstream issues: [#24528](https://github.com/immich-app/immich/issues/24528), [#30250](https://github.com/immich-app/immich/issues/30250).
 
-Everything else matches the upstream release. There are no database migrations and no new settings, and the web and mobile apps are unchanged. The only other addition is a CI workflow that builds the image.
+Everything else matches upstream `main`. The fork adds no database migrations and no new settings, and the web and mobile apps are unchanged. The only other addition is a CI workflow that builds the image.
 
 ## Using the Docker image
 
@@ -22,14 +22,14 @@ In your `docker-compose.yml`, replace only the server image:
 ```yaml
 services:
   immich-server:
-    image: ghcr.io/br4yd/immich-server:v3.3.6-privacy-fix # was ghcr.io/immich-app/immich-server:...
+    image: ghcr.io/br4yd/immich-server:latest # was ghcr.io/immich-app/immich-server:...
 ```
 
 - **Existing devices:** the re-sync only runs when the setting changes. If Public Users is already off when you switch to this image, turn it on and back off once so devices drop their cached user list.
-- **Machine learning:** keep the official `immich-machine-learning` image at the matching version. This fork does not build its own.
-- **Versions:** image tags follow `vX.Y.Z-privacy-fix`, based on upstream `vX.Y.Z`. See the [available images](https://github.com/br4yd/immich/pkgs/container/immich-server).
+- **Based on upstream `main`:** this fork's `main` is upstream `main` with the patches on top, so the image contains unreleased development code, not an Immich release.
+- **Tags:** every build is tagged `latest` and with its build date (`YYYY-MM-DD`). Pin a date tag to stay on a specific build. See the [available images](https://github.com/br4yd/immich/pkgs/container/immich-server).
+- **Machine learning:** keep the official `immich-machine-learning` image on the latest release. This fork does not build its own.
 - **Platform:** `linux/amd64` only.
-- **Source:** the changes are on the `deploy/vX.Y.Z` branches, not on `main`.
 
 ---
 
